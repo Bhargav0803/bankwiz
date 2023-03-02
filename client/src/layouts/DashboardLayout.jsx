@@ -4,13 +4,16 @@ import { Lato } from 'next/font/google'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMode } from '../redux/slices/darkModeSlice'
 import { AppBar, SideBar } from '../components'
+import { useRouter } from 'next/router'
 
 // default imports
 import Head from 'next/head'
+import { ChatBubbleBottomCenterIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid'
+import Script from 'next/script'
 
 // font style for the dashboard
 const lato = Lato({
-  subsets: ['latin'],  
+  subsets: ['latin'],
   weight: ['400', '700'],
   variable: '--font-lato'
 })
@@ -18,6 +21,8 @@ const lato = Lato({
 const DashboardLayout = ({ children }) => {
   const darkMode = useSelector(state => state.darkMode.isDarkMode)
   const dispatch = useDispatch()
+
+  const router = useRouter()
 
   // Dark Mode Logic
   useEffect(() => {
@@ -50,6 +55,8 @@ const DashboardLayout = ({ children }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
+      <Script type='module' src='https://10az.online.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js'></Script>
+
       <div className='grid grid-cols-12'>
         {/* left section */}
         <div className='col-span-2 bg-slate-700 text-gray-100 dark:bg-slate-900'>
@@ -59,9 +66,10 @@ const DashboardLayout = ({ children }) => {
         {/* right (main) section */}
         <div className='col-span-10 bg-white text-gray-700 dark:bg-slate-700 dark:text-gray-100'>
           <AppBar darkMode={darkMode} />
-
           <main className='px-4 py-6'>
             {children}
+            <ChatBubbleBottomCenterTextIcon onClick={() => router.push('/chat')} className='h-10 w-10 cursor-pointer fixed bottom-0 right-0 m-6' />
+
           </main>
         </div>
       </div>
